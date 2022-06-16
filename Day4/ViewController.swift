@@ -10,7 +10,6 @@ import UIKit
 class ViewController: UIViewController {
     
     @IBOutlet weak var tableView: UITableView!
-    var dummy: [String] = ["File", "Edit", "View", "Find", "Navigate", "Editor", "Product", "Debug", "Source Control", "Window", "Help"]
     var dataArray: [List] = []
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -25,7 +24,7 @@ class ViewController: UIViewController {
         tableView.register(UINib(nibName: "TableViewCell", bundle: nil), forCellReuseIdentifier: "cell")
     }
     @IBAction func btnAdd(_ sender: Any) {
-        let addVC = self.storyboard?.instantiateViewController(withIdentifier: "add") as! AddViewController
+        guard let addVC = self.storyboard?.instantiateViewController(withIdentifier: "add") as? AddViewController else { return }
         addVC.isDismissed = { [weak self] in
             self?.dataArray = getData().reversed()
             self?.tableView.reloadData()
@@ -48,7 +47,6 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
         return cell
     }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        //print(try? UserDefaults.standard.getObject(forKey: "data", castTo: [List].self))
         guard let detailVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "detail") as? DetailViewController else { return }
         detailVC.judul = dataArray[indexPath.row].title
         detailVC.subjudul = dataArray[indexPath.row].subTitle
